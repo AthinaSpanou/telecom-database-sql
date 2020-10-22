@@ -15,7 +15,7 @@ Deliverables:
 1. Τhe Entity-Relationship Diagram (ERD) to model entities, relationships, attributes, cardinalities,
 and all necessary constraints. 
 
-![alt text](https://github.com/AthinaSpanou/telecom-database-sql/blob/main/ERD.png
+![alt text](https://github.com/AthinaSpanou/telecom-database-sql/blob/main/ERD.png)
 
 2. (10%) Create the relational schema in MySQL/SQLServer and insert a few records into the tables to test
 your queries below. You will have to hand in the CREATE TABLE statements.
