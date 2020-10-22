@@ -24,10 +24,10 @@ and all necessary constraints.
 3. [SQL Code](https://github.com/AthinaSpanou/telecom-database-sql/blob/main/sql_queries.sql) in order to test some queries.
 
 
+#### First create tables that have no foreign keys
+~~~~mysql
 CREATE DATABASE tp;
 USE tp;
-
-# First create tables that have no foreign keys
 
 CREATE TABLE city (
 city_id INT NOT NULL AUTO_INCREMENT,
@@ -79,7 +79,7 @@ contract_id INT NOT NULL,
 PRIMARY KEY (call_id),
 FOREIGN KEY (contract_id) REFERENCES contract(contract_id)
 );
-
+~~~~
 #### Insert a few records into the tables to test your queries below.
 ~~~~mysql
 # TABLE CITY
@@ -157,61 +157,65 @@ INSERT INTO calls(call_id, date_time_of_call, called_phone_number, duration, con
 SELECT * FROM calls;
 ~~~~
 
-# a. Show the call id of all calls that were made between 8am and 10am on June 2018 having duration < 30
+#### A. Show the call id of all calls that were made between 8am and 10am on June 2018 having duration < 30
 
+~~~~mysql
 SELECT call_id AS 'Call ID'
 FROM calls
 WHERE MONTH(date_time_of_call) = 6 AND YEAR(date_time_of_call) = 2018 AND HOUR(date_time_of_call) BETWEEN 8 AND 10 AND duration < 30 ;
 
-# -------------------------------------------------------------------------------------------------------------------------------------------------------------
+~~~~
 
-# b. Show the first and last name of customers that live in a city with population greater than 20000
+#### B. Show the first and last name of customers that live in a city with population greater than 20000
+
+~~~~mysql
 
 SELECT first_name AS 'First Name' , last_name AS 'Last Name'
 FROM customer , city
 WHERE city.population > 20000 AND city.city_id = customer.city_id;
+~~~~
 
-# -------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-# c. Show the customer id that have a contract in the plan name LIKE 'Freedom' (use nested queries)
+#### C. Show the customer id that have a contract in the plan name LIKE 'Freedom' (use nested queries)
+~~~~mysql
 
 SELECT customer.customer_id AS 'Customer ID'
 FROM customer, contract
 WHERE contract.plan_id IN (SELECT plan_id
 						   FROM plan
                            WHERE plan_name LIKE '%Freedom%') AND customer.customer_id=contract.customer_id;
-                  
-# -------------------------------------------------------------------------------------------------------------------------------------------------------------
+~~~~
+                 
+#### D. For each contract that ends in less than sixty days from today, show the contract id, the phone number, the customer's id, his/her first name and his/her last name.
 
-# d. For each contract that ends in less than sixty days from today, show the contract id, the phone number, the customer's id, his/her first name and his/her last name.
+~~~~mysql
 
 SELECT contract_id AS 'Contract ID', phone_number AS 'Phone Number', customer.customer_id AS 'Customer ID', first_name AS 'First Name', last_name AS 'Last Name'
 FROM customer, contract
 WHERE DATEDIFF(CURRENT_TIMESTAMP, end_date) < 60 AND customer.customer_id=contract.customer_id
 GROUP BY contract_id;
+~~~~
 
-# -------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-# e. For each contract id and each month of 2018, show the average duration of calls
+### E. For each contract id and each month of 2018, show the average duration of calls
+~~~~mysql
 
 SELECT contract_id AS 'Contract ID', MONTH(date_time_of_call) AS 'Month', ROUND(AVG(duration),2) AS 'Average Duration of Calls'
 FROM calls
 WHERE YEAR(date_time_of_call) = 2018
 GROUP BY contract_id, MONTH(date_time_of_call)
 ORDER BY contract_id ASC;
+~~~~
 
-# -------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-# f. Show the total duration of calls in 2018 per plan id
+#### F. Show the total duration of calls in 2018 per plan id
+~~~~mysql
 
 SELECT plan.plan_id AS 'Plan ID', SUM(calls.duration) AS 'Total Duration of Calls' 
 FROM plan, contract, calls
 WHERE plan.plan_id = contract.plan_id AND contract.contract_id=calls.contract_id AND YEAR(date_time_of_call)=2018
 GROUP BY plan.plan_id;
+~~~~
 
-# -------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-# g. Show the top called number among TP's customers in 2018
+#### G. Show the top called number among TP's customers in 2018
+~~~~mysql
 
 SELECT called_phone_number AS 'Top Called Phone Number', COUNT(called_phone_number) AS 'Times Called'
 FROM calls
@@ -219,10 +223,10 @@ WHERE YEAR(date_time_of_call) = 2018
 GROUP BY called_phone_number
 ORDER BY COUNT(called_phone_number) DESC
 LIMIT 1;
+~~~~
 
-# -------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-# h. Show the contract ids and the months where the total duration of the calls was greater than the free minutes offered by the plan of the contract
+#### H. Show the contract ids and the months where the total duration of the calls was greater than the free minutes offered by the plan of the contract
+~~~~mysql
 
 CREATE VIEW total_calls(contract, call_month, duration,plan) AS						
 SELECT contract.contract_id, MONTH(date_time_of_call), (duration), contract.plan_id
@@ -237,9 +241,10 @@ WHERE total_calls.plan=plan.plan_id
 GROUP BY total_calls.contract,total_calls.call_month
 HAVING SUM(total_calls.duration)>(free_minutes*60);
 
-# -------------------------------------------------------------------------------------------------------------------------------------------------------------
+~~~~
 
-# i. For each month of 2018, show the percentage change of the total duration of calls compared to the same month of 2017
+#### I. For each month of 2018, show the percentage change of the total duration of calls compared to the same month of 2017
+~~~~mysql
 
 SELECT Month2018 AS 'Month', CONCAT(ROUND((duration2018-duration2017)/duration2017*100),'%') AS 'Percent Change'
 FROM ( SELECT SUM(duration) AS duration2018, MONTH(date_time_of_call) AS Month2018
@@ -251,10 +256,10 @@ FROM ( SELECT SUM(duration) AS duration2018, MONTH(date_time_of_call) AS Month20
        WHERE YEAR(date_time_of_call)=2017
       GROUP BY Month2017) AS calls_2017
 WHERE calls_2018.Month2018=calls_2017.Month2017;
+~~~~
 
-# -------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-# j. For each city id and calls made in 2018, show the average call duration by females and the average call duration by males (i.e. three columns)
+#### J. For each city id and calls made in 2018, show the average call duration by females and the average call duration by males (i.e. three columns)
+~~~~mysql
 
 CREATE VIEW total_duration(callid,duration, crontractid,customerid) AS	
 SELECT call_id, duration, calls.contract_id, contract.customer_id
@@ -288,11 +293,10 @@ UNION
 SELECT city_id, ROUND(femaleduration,2) ,ROUND(maleduration,2) 
 FROM male LEFT JOIN female USING (city_id); 
 
-# -------------------------------------------------------------------------------------------------------------------------------------------------------------
+~~~~
+#### K.  For each city id, show the city id, the ratio of the total duration of the calls made from customers staying in that city in 2018 over the total duration of all calls made in 2018, and the ratio of the city’s population over the total population of all cities (i.e three columns)
 
-# k.  For each city id, show the city id, the ratio of the total duration of the calls made from customers staying in that city in 2018 over the total duration of all calls 
-# made in 2018, and the ratio of the city’s population over the total population of all cities (i.e three columns)
-
+~~~~mysql
 # Ratio of the city’s population over the total population of all cities
 CREATE VIEW city_population(city_id,population_ratio) AS
 SELECT city_a.city_id, city_a.population/SUM(city_b.population)
@@ -314,3 +318,4 @@ FROM city_population  LEFT JOIN city_call USING (city_id))
 UNION
 SELECT city_id, ROUND(population_ratio,2) ,ROUND(calls_ratio,2)
 FROM city_call  LEFT JOIN  city_population USING (city_id); 
+~~~~
