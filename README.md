@@ -11,12 +11,14 @@ plan is described by a unique identifier, name, free-minutes, free-sms and free-
 by a phone number have to be stored, along with a unique identifier, the date/time of the call (hour, minute, day,
 month, year), the called phone number and the duration of the call (in seconds).
 
-Deliverables:
+## Deliverables:
 1. Τhe Entity-Relationship Diagram (ERD) to model entities, relationships, attributes, cardinalities,
 and all necessary constraints. 
 
 ![alt text](https://github.com/AthinaSpanou/telecom-database-sql/blob/main/ERD.png)
 
-2. (10%) Create the relational schema in MySQL/SQLServer and insert a few records into the tables to test
-your queries below. You will have to hand in the CREATE TABLE statements.
-3. (60%) Write SQL code and test it to your data for the following queries
+2. The relational Schema in MySQL/SQLServer.
+
+![alt text](https://github.com/AthinaSpanou/telecom-database-sql/blob/main/Relationship%20Schema%20Model.png)
+
+3. Write ![SQL Code](https://github.com/AthinaSpanou/telecom-database-sql/blob/main/sql_queries.sql) in order to test some queries.
