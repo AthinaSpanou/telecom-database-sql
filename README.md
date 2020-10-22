@@ -180,8 +180,8 @@ WHERE city.population > 20000 AND city.city_id = customer.city_id;
 
 SELECT customer.customer_id AS 'Customer ID'
 FROM customer, contract
-WHERE contract.plan_id IN (SELECT plan_id
-						   FROM plan
+WHERE contract.plan_id IN (SELECT plan_id 
+			   FROM plan
                            WHERE plan_name LIKE '%Freedom%') AND customer.customer_id=contract.customer_id;
 ~~~~
                  
