@@ -21,4 +21,4 @@ and all necessary constraints.
 
 ![alt text](https://github.com/AthinaSpanou/telecom-database-sql/blob/main/Relationship%20Schema%20Model.png)
 
-3. Write ![SQL Code](https://github.com/AthinaSpanou/telecom-database-sql/blob/main/sql_queries.sql) in order to test some queries.
+3. ![SQL Code](https://github.com/AthinaSpanou/telecom-database-sql/blob/main/sql_queries.sql) in order to test some queries.
